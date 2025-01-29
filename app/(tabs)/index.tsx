@@ -52,7 +52,7 @@ export default function BrowseScreen() {
                   icon={
                     <Heart
                       color={isFavorite ? "$red10" : "$color"}
-                      fill={isFavorite ? "$red10" : "none"}
+                      fill={isFavorite ? "red" : "none"}
                     />
                   }
                   onPress={(e) => {
