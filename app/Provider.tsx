@@ -16,10 +16,7 @@ export function Provider({
       defaultTheme={colorScheme === "dark" ? "dark" : "light"}
       {...rest}
     >
-      <ToastProvider
-        swipeDirection="horizontal"
-        duration={6000}
-      >
+      <ToastProvider swipeDirection="horizontal" duration={6000}>
         {children}
         <CurrentToast />
         <ToastViewport top="$8" left={0} right={0} />

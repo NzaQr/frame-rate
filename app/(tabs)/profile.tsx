@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   YStack,
   Avatar,
@@ -8,15 +9,22 @@ import {
   ScrollView,
   XStack,
   Image,
+  AnimatePresence,
 } from "tamagui";
-import { Settings, Heart } from "@tamagui/lucide-icons";
+import { ChevronDown, ChevronUp } from "@tamagui/lucide-icons";
 import { useFavorites } from "../../contexts/FavoritesContext";
+import { MotiView } from "moti";
 
 export default function ProfileScreen() {
   const { favorites } = useFavorites();
+  const [showFavorites, setShowFavorites] = useState(false);
+
+  const toggleFavorites = () => {
+    setShowFavorites(!showFavorites);
+  };
 
   return (
-    <ScrollView>
+    <ScrollView bg="$background">
       <YStack flex={1} items="center" bg="$background" p="$4" space>
         <Avatar circular size="$10">
           <Avatar.Image src="https://via.placeholder.com/150" />
@@ -28,46 +36,52 @@ export default function ProfileScreen() {
         <Separator />
 
         <Button
-          icon={Heart}
+          iconAfter={showFavorites ? ChevronUp : ChevronDown}
           bg="$backgroundHover"
           color="$color"
           width="100%"
-          justify="flex-start"
+          justify="space-between"
           mb="$2"
+          onPress={toggleFavorites}
         >
           {`Favorite Movies (${favorites.length})`}
         </Button>
-        <Button
-          icon={Settings}
-          bg="$backgroundHover"
-          color="$color"
-          width="100%"
-          justify="flex-start"
-        >
-          Settings
-        </Button>
 
-        <YStack mt="$4" width="100%">
-          <H3>Your Favorite Movies</H3>
-          {favorites.map((movie) => (
-            <XStack
-              key={movie.id}
-              mt="$2"
-              bg="$backgroundHover"
-              p="$2"
-              borderTopLeftRadius="$2"
-              borderTopRightRadius="$2"
-              borderBottomLeftRadius="$2"
-              borderBottomRightRadius="$2"
+        <AnimatePresence>
+          {showFavorites && (
+            <MotiView
+              from={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ type: "spring", damping: 15, stiffness: 150 }}
+              style={{ width: "100%", overflow: "hidden" }}
             >
-              <Image source={{ uri: movie.poster }} width={50} height={75} />
-              <YStack ml="$2" justify="center">
-                <Paragraph>{movie.title}</Paragraph>
-                <Paragraph color="$color">{movie.year}</Paragraph>
+              <YStack width="100%" space>
+                {favorites.map((movie) => (
+                  <XStack
+                    key={movie.id}
+                    bg="$backgroundHover"
+                    p="$2"
+                    borderTopLeftRadius="$2"
+                    borderTopRightRadius="$2"
+                    borderBottomLeftRadius="$2"
+                    borderBottomRightRadius="$2"
+                  >
+                    <Image
+                      source={{ uri: movie.poster }}
+                      width={50}
+                      height={75}
+                    />
+                    <YStack ml="$2" justify="center">
+                      <Paragraph>{movie.title}</Paragraph>
+                      <Paragraph color="$color">{movie.year}</Paragraph>
+                    </YStack>
+                  </XStack>
+                ))}
               </YStack>
-            </XStack>
-          ))}
-        </YStack>
+            </MotiView>
+          )}
+        </AnimatePresence>
       </YStack>
     </ScrollView>
   );
