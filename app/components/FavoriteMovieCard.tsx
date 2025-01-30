@@ -20,7 +20,7 @@ const FavoriteMovieCard = ({ movie }: FavoriteMovieCardProps) => {
       <XStack key={movie.id} bg="$backgroundHover" p="$2" rounded="$2">
         <Image
           source={{
-            uri: `${IMAGE_BASE_URL}${movie.backdrop_path}`,
+            uri: `${IMAGE_BASE_URL}${movie.poster_path}`,
           }}
           width={50}
           height={75}
