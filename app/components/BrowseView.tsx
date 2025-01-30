@@ -11,7 +11,6 @@ type BrowseViewProps = {
   isLoading: boolean;
   error: unknown;
   onSearchChange: (query: string) => void;
-  onSearch: () => void;
 };
 
 const BrowseView = ({
@@ -21,7 +20,6 @@ const BrowseView = ({
   isLoading,
   error,
   onSearchChange,
-  onSearch,
 }: BrowseViewProps) => {
   const renderMovieItem = ({ item }: { item: Movie }) => {
     const isFavorite = favorites.some((fav) => fav.id === item.id);

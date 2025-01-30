@@ -40,7 +40,6 @@ const ProfileView = ({
         <RatingsSection
           showRatings={showRatings}
           onToggleRatings={onToggleRatings}
-      
         />
       </YStack>
     </ScrollView>

@@ -12,7 +12,6 @@ const BrowseContainer = () => {
     data: movies,
     isLoading,
     error,
-    refetch,
   } = useQuery({
     queryKey: ["movies", searchQuery],
     queryFn: () =>
@@ -29,7 +28,6 @@ const BrowseContainer = () => {
       isLoading={isLoading}
       error={error}
       onSearchChange={setSearchQuery}
-      onSearch={refetch}
     />
   );
 };
