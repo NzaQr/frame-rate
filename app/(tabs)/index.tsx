@@ -85,9 +85,7 @@ export default function BrowseScreen() {
           onPress={() => {
             /* Implementar búsqueda */
           }}
-        >
-          Search
-        </Button>
+        />
       </XStack>
       <FlatList
         data={mockMovies}

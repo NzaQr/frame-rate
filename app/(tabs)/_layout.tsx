@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Link, Tabs } from "expo-router";
 import { Button, useTheme } from "tamagui";
 import { Film, Settings, User } from "@tamagui/lucide-icons";
 
@@ -34,9 +34,11 @@ export default function TabLayout() {
           title: "Profile",
           tabBarIcon: ({ color }) => <User color={color as any} />,
           headerRight: () => (
-            <Button bg="transparent" justify="flex-end">
-              <Settings />
-            </Button>
+            <Link href="/settings" asChild>
+              <Button bg="transparent" justify="flex-end">
+                <Settings />
+              </Button>
+            </Link>
           ),
         }}
       />
