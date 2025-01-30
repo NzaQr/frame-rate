@@ -10,9 +10,7 @@ import {
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { Button, useTheme } from "tamagui";
-import { FavoritesProvider } from "contexts/FavoritesContext";
-import { X } from "@tamagui/lucide-icons";
+import { useTheme } from "tamagui";
 import Provider from "./Provider";
 
 export {
@@ -64,39 +62,37 @@ function RootLayoutNav() {
       <StatusBar
         barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
       />
-      <FavoritesProvider>
-        <Stack>
-          <Stack.Screen
-            name="(tabs)"
-            options={{
-              headerShown: false,
-            }}
-          />
+      <Stack>
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: false,
+          }}
+        />
 
-          <Stack.Screen
-            name="modal"
-            options={({ route }) => {
-              const params = route.params as { movie?: string };
-              type MovieData = { title: string };
-              let movieData: MovieData | null = null;
-              try {
-                movieData = params.movie ? JSON.parse(params.movie) : null;
-              } catch (error) {
-                console.error("Error parsing movie data:", error);
-              }
-              return {
-                headerShown: false,
-                presentation: "modal",
-                gestureEnabled: true,
-                gestureDirection: "horizontal",
-                contentStyle: {
-                  backgroundColor: theme.background.val,
-                },
-              };
-            }}
-          />
-        </Stack>
-      </FavoritesProvider>
+        <Stack.Screen
+          name="modal"
+          options={({ route }) => {
+            const params = route.params as { movie?: string };
+            type MovieData = { title: string };
+            let movieData: MovieData | null = null;
+            try {
+              movieData = params.movie ? JSON.parse(params.movie) : null;
+            } catch (error) {
+              console.error("Error parsing movie data:", error);
+            }
+            return {
+              headerShown: false,
+              presentation: "modal",
+              gestureEnabled: true,
+              gestureDirection: "horizontal",
+              contentStyle: {
+                backgroundColor: theme.background.val,
+              },
+            };
+          }}
+        />
+      </Stack>
     </ThemeProvider>
   );
 }

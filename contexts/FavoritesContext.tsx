@@ -1,50 +1,24 @@
-import type React from "react";
-import { createContext, useState, useContext, type ReactNode } from "react";
+import { Movie } from "constants/movie-types";
+import { create } from "zustand";
 
-export type Movie = {
-  id: string;
-  backdrop_path: any;
-  poster_path: any;
-  title: string;
-  year: string;
-};
-
-type FavoritesContextType = {
+type FavoritesStore = {
   favorites: Movie[];
   toggleFavorite: (movie: Movie) => void;
 };
 
-const FavoritesContext = createContext<FavoritesContextType | undefined>(
-  undefined
-);
-
-export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const [favorites, setFavorites] = useState<Movie[]>([]);
-
-  const toggleFavorite = (movie: Movie) => {
-    setFavorites((prevFavorites) => {
-      const isFavorite = prevFavorites.some((fav) => fav.id === movie.id);
+export const useFavoritesStore = create<FavoritesStore>((set) => ({
+  favorites: [],
+  toggleFavorite: (movie: Movie) =>
+    set((state) => {
+      const isFavorite = state.favorites.some((fav) => fav.id === movie.id);
       if (isFavorite) {
-        return prevFavorites.filter((fav) => fav.id !== movie.id);
+        return {
+          favorites: state.favorites.filter((fav) => fav.id !== movie.id),
+        };
       } else {
-        return [...prevFavorites, movie];
+        return {
+          favorites: [...state.favorites, movie],
+        };
       }
-    });
-  };
-
-  return (
-    <FavoritesContext.Provider value={{ favorites, toggleFavorite }}>
-      {children}
-    </FavoritesContext.Provider>
-  );
-};
-
-export const useFavorites = () => {
-  const context = useContext(FavoritesContext);
-  if (context === undefined) {
-    throw new Error("useFavorites must be used within a FavoritesProvider");
-  }
-  return context;
-};
+    }),
+}));
