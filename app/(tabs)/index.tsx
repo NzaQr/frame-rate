@@ -130,6 +130,7 @@ export default function BrowseScreen() {
             keyExtractor={(item) => item.id.toString()}
             numColumns={2}
             columnWrapperStyle={{ justifyContent: "space-between" }}
+            keyboardDismissMode="on-drag"
           />
         </>
       )}

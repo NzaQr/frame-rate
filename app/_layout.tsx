@@ -8,11 +8,12 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { router, SplashScreen, Stack, useLocalSearchParams } from "expo-router";
-import { Provider } from "./Provider";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { Button, useTheme } from "tamagui";
 import { FavoritesProvider } from "contexts/FavoritesContext";
 import { X } from "@tamagui/lucide-icons";
+import Provider from "./Provider";
 
 export {
   // Catch any errors thrown by the Layout component.
