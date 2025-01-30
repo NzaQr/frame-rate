@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useFavoritesStore } from "../../contexts/FavoritesContext";
+import { useFavoritesStore } from "../../contexts/FavoritesStore";
 import { MovieModalView } from "../components/MovieModalView";
 import type { Movie } from "../../constants/movie-types";
 

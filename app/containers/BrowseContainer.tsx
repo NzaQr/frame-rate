@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import BrowseView from "../components/BrowseView";
-import { useFavoritesStore } from "contexts/FavoritesContext";
+import { useFavoritesStore } from "contexts/FavoritesStore";
 import { movieApi } from "services/movieApi";
 
 const BrowseContainer = () => {

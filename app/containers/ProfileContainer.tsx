@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useFavoritesStore } from "../../contexts/FavoritesContext";
+import { useFavoritesStore } from "../../contexts/FavoritesStore";
 import { ProfileView } from "../components/ProfileView";
 
 export const ProfileContainer = () => {
