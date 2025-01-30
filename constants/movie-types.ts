@@ -8,6 +8,6 @@ export type Movie = {
   poster: string;
 };
 
-export const TMDB_API_KEY = "7e8845586d780d43d2434f0780112873";
+export const TMDB_API_KEY = process.env.EXPO_PUBLIC_TMDB_API_KEY || "";
 export const BASE_URL = "https://api.themoviedb.org/3";
 export const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";

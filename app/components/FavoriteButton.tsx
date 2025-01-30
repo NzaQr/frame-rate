@@ -21,7 +21,7 @@ const FavoriteButton = ({
         e.stopPropagation();
         onToggleFavorite(movie);
       }}
-      bg={isFavorite ? "$red10" : "$background"}
+      bg={isFavorite ? "$red10" : "#fff"}
       pressStyle={{ bg: isFavorite ? "$red11" : "$red5" }}
       mt="$4"
       borderWidth={0}
