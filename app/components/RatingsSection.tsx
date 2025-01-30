@@ -1,35 +1,35 @@
 import { Button, YStack, Paragraph } from "tamagui";
 import { ChevronDown, ChevronUp } from "@tamagui/lucide-icons";
 import { AnimatePresence, MotiView } from "moti";
-import { Movie } from "../../constants/movie-types";
-import FavoriteMovieCard from "./FavoriteMovieCard";
+import { useFavoritesStore } from "contexts/FavoritesStore";
+import RatedMovieCard from "./RatedMovieCard";
 
-type FavoritesSectionProps = {
-  favorites: Movie[];
-  showFavorites: boolean;
-  onToggleFavorites: () => void;
+type RatingsSectionProps = {
+  showRatings: boolean;
+  onToggleRatings: () => void;
 };
 
-const FavoritesSection = ({
-  favorites,
-  showFavorites,
-  onToggleFavorites,
-}: FavoritesSectionProps) => {
+const RatingsSection = ({
+  showRatings,
+  onToggleRatings,
+}: RatingsSectionProps) => {
+  const { ratings } = useFavoritesStore();
+
   return (
     <>
       <Button
-        iconAfter={showFavorites ? ChevronUp : ChevronDown}
+        iconAfter={showRatings ? ChevronUp : ChevronDown}
         bg="$backgroundHover"
         color="$color"
         width="100%"
         justify="space-between"
         mb="$2"
-        onPress={onToggleFavorites}
+        onPress={onToggleRatings}
       >
-        {`Favorite Movies (${favorites.length})`}
+        {`Rated Movies (${ratings.length})`}
       </Button>
 
-      {showFavorites && (
+      {showRatings && (
         <AnimatePresence>
           <MotiView
             from={{ opacity: 0, height: 0 }}
@@ -39,15 +39,16 @@ const FavoritesSection = ({
             style={{ width: "100%", overflow: "hidden" }}
           >
             <YStack width="100%" space>
-              {favorites.length === 0 ? (
+              {ratings.length === 0 ? (
                 <YStack items="center">
-                  <Paragraph color="$color">
-                    No favorite movies found.
-                  </Paragraph>
+                  <Paragraph color="$color">No movies rated yet.</Paragraph>
                 </YStack>
               ) : (
-                favorites.map((movie) => (
-                  <FavoriteMovieCard key={movie.id} movie={movie} />
+                ratings.map((ratedMovie) => (
+                  <RatedMovieCard
+                    key={ratedMovie.movie.id}
+                    ratedMovie={ratedMovie}
+                  />
                 ))
               )}
             </YStack>
@@ -57,4 +58,4 @@ const FavoritesSection = ({
     </>
   );
 };
-export default FavoritesSection;
+export default RatingsSection;

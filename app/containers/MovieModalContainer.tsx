@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useFavoritesStore } from "../../contexts/FavoritesStore";
-import { MovieModalView } from "../components/MovieModalView";
+import MovieModalView from "../components/MovieModalView";
+import { useFavoritesStore } from "contexts/FavoritesStore";
 import type { Movie } from "../../constants/movie-types";
 
-export const MovieModalContainer = () => {
+ const MovieModalContainer = () => {
   const router = useRouter();
   const params = useLocalSearchParams<{ movie?: string }>();
-  const { favorites, toggleFavorite } = useFavoritesStore();
+  const { favorites, toggleFavorite, setRating, getRating } =
+    useFavoritesStore();
   const [movieData, setMovieData] = useState<Movie | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -33,12 +34,23 @@ export const MovieModalContainer = () => {
     router.back();
   };
 
+  const handleRatingChange = (rating: number) => {
+    if (movieData) {
+      setRating(movieData, rating);
+    }
+  };
+
+  const currentRating = movieData ? getRating(movieData) : 0;
+
   return (
     <MovieModalView
       movie={movieData}
       isFavorite={isFavorite}
+      rating={currentRating}
       onToggleFavorite={toggleFavorite}
+      onRatingChange={handleRatingChange}
       onClose={handleClose}
     />
   );
 };
+export default MovieModalContainer;

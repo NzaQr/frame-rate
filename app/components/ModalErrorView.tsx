@@ -5,7 +5,7 @@ type ErrorViewProps = {
   onBack: () => void;
 };
 
-export const ModalErrorView = ({ onBack }: ErrorViewProps) => {
+const ModalErrorView = ({ onBack }: ErrorViewProps) => {
   return (
     <View flex={1} p="$4" bg="$background" content="center" items="center">
       <Paragraph>No movie data available.</Paragraph>
@@ -15,3 +15,4 @@ export const ModalErrorView = ({ onBack }: ErrorViewProps) => {
     </View>
   );
 };
+export default ModalErrorView;

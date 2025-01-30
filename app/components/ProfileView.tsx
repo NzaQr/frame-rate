@@ -1,17 +1,23 @@
 import { ScrollView, YStack, Avatar, H3, Paragraph, Separator } from "tamagui";
 import { Movie } from "../../constants/movie-types";
-import { FavoritesSection } from "./FavoritesSection";
+import FavoritesSection from "./FavoritesSection";
+import RatingsSection from "./RatingsSection";
+import { MovieRating } from "contexts/FavoritesStore";
 
 type ProfileViewProps = {
   favorites: Movie[];
   showFavorites: boolean;
   onToggleFavorites: () => void;
+  showRatings: boolean;
+  onToggleRatings: () => void;
 };
 
-export const ProfileView = ({
+const ProfileView = ({
   favorites,
   showFavorites,
   onToggleFavorites,
+  showRatings,
+  onToggleRatings,
 }: ProfileViewProps) => {
   return (
     <ScrollView bg="$background">
@@ -30,7 +36,14 @@ export const ProfileView = ({
           showFavorites={showFavorites}
           onToggleFavorites={onToggleFavorites}
         />
+
+        <RatingsSection
+          showRatings={showRatings}
+          onToggleRatings={onToggleRatings}
+      
+        />
       </YStack>
     </ScrollView>
   );
 };
+export default ProfileView;

@@ -1,6 +1,7 @@
 import { Button } from "tamagui";
 import { MotiText } from "moti";
 import type { Movie } from "../../constants/movie-types";
+import * as Haptics from "expo-haptics";
 
 type FavoriteButtonProps = {
   isFavorite: boolean;
@@ -8,7 +9,7 @@ type FavoriteButtonProps = {
   movie: Movie;
 };
 
-export const FavoriteButton = ({
+const FavoriteButton = ({
   isFavorite,
   onToggleFavorite,
   movie,
@@ -16,12 +17,14 @@ export const FavoriteButton = ({
   return (
     <Button
       onPress={(e) => {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         e.stopPropagation();
         onToggleFavorite(movie);
       }}
       bg={isFavorite ? "$red10" : "$background"}
       pressStyle={{ bg: isFavorite ? "$red11" : "$red5" }}
       mt="$4"
+      borderWidth={0}
       style={{ borderRadius: 50, width: 200, height: 50 }}
     >
       <MotiText
@@ -38,3 +41,5 @@ export const FavoriteButton = ({
     </Button>
   );
 };
+
+export default FavoriteButton;

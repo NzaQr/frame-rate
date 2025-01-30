@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { useFavoritesStore } from "../../contexts/FavoritesStore";
-import { ProfileView } from "../components/ProfileView";
+import ProfileView from "../components/ProfileView";
 
-export const ProfileContainer = () => {
+const ProfileContainer = () => {
   const { favorites } = useFavoritesStore();
   const [showFavorites, setShowFavorites] = useState(false);
+  const [showRatings, setShowRatings] = useState(false);
 
   const handleToggleFavorites = () => {
     setShowFavorites(!showFavorites);
+  };
+
+  const handleToggleRatings = () => {
+    setShowRatings(!showRatings);
   };
 
   return (
@@ -15,6 +20,9 @@ export const ProfileContainer = () => {
       favorites={favorites}
       showFavorites={showFavorites}
       onToggleFavorites={handleToggleFavorites}
+      showRatings={showRatings}
+      onToggleRatings={handleToggleRatings}
     />
   );
 };
+export default ProfileContainer;

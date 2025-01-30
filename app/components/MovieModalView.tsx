@@ -2,22 +2,27 @@ import { View, H3, Paragraph, Image, YStack, Button } from "tamagui";
 import { X } from "@tamagui/lucide-icons";
 import { AnimatePresence } from "moti";
 import type { Movie } from "../../constants/movie-types";
-import { FavoriteButton } from "./FavoriteButton";
-import { ModalErrorView } from "./ModalErrorView";
+import FavoriteButton from "./FavoriteButton";
+import StarRating from "./StarRating";
+import ModalErrorView from "./ModalErrorView";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 type MovieModalViewProps = {
   movie: Movie | null;
   isFavorite: boolean;
+  rating: number;
   onToggleFavorite: (movie: Movie) => void;
+  onRatingChange: (rating: number) => void;
   onClose: () => void;
 };
 
-export const MovieModalView = ({
+const MovieModalView = ({
   movie,
   isFavorite,
+  rating,
   onToggleFavorite,
+  onRatingChange,
   onClose,
 }: MovieModalViewProps) => {
   if (!movie) {
@@ -47,8 +52,8 @@ export const MovieModalView = ({
         icon={X}
         onPress={onClose}
       />
-      <YStack flex={1} items="center" mb="$10" justify="center" space>
-        <YStack items="center" mb="$5">
+      <YStack flex={1} items="center" justify="center" space>
+        <YStack items="center">
           <H3>{movie.title}</H3>
           <Paragraph>{movie.year}</Paragraph>
         </YStack>
@@ -58,6 +63,8 @@ export const MovieModalView = ({
           width={300}
           height={450}
         />
+
+        <StarRating rating={rating} onRatingChange={onRatingChange} size={32} />
 
         <AnimatePresence>
           <FavoriteButton
@@ -70,3 +77,4 @@ export const MovieModalView = ({
     </View>
   );
 };
+export default MovieModalView;
