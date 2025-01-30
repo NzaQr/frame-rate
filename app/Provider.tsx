@@ -3,12 +3,14 @@ import { TamaguiProvider, type TamaguiProviderProps } from "tamagui";
 import { ToastProvider, ToastViewport } from "@tamagui/toast";
 import { CurrentToast } from "./CurrentToast";
 import { config } from "../tamagui.config";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export function Provider({
   children,
   ...rest
 }: Omit<TamaguiProviderProps, "config">) {
   const colorScheme = useColorScheme();
+  const queryClient = new QueryClient();
 
   return (
     <TamaguiProvider
@@ -16,11 +18,13 @@ export function Provider({
       defaultTheme={colorScheme === "dark" ? "dark" : "light"}
       {...rest}
     >
-      <ToastProvider swipeDirection="horizontal" duration={6000}>
-        {children}
-        <CurrentToast />
-        <ToastViewport top="$8" left={0} right={0} />
-      </ToastProvider>
+      <QueryClientProvider client={queryClient}>
+        <ToastProvider swipeDirection="horizontal" duration={6000}>
+          {children}
+          <CurrentToast />
+          <ToastViewport top="$8" left={0} right={0} />
+        </ToastProvider>
+      </QueryClientProvider>
     </TamaguiProvider>
   );
 }

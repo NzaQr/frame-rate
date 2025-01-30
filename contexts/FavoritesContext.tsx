@@ -1,11 +1,12 @@
 import type React from "react";
 import { createContext, useState, useContext, type ReactNode } from "react";
 
-type Movie = {
+export type Movie = {
   id: string;
+  backdrop_path: any;
+  poster_path: any;
   title: string;
-  year: number;
-  poster: string;
+  year: string;
 };
 
 type FavoritesContextType = {

@@ -18,6 +18,7 @@ import { MotiView } from "moti";
 export default function ProfileScreen() {
   const { favorites } = useFavorites();
   const [showFavorites, setShowFavorites] = useState(false);
+  const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
   const toggleFavorites = () => {
     setShowFavorites(!showFavorites);
@@ -57,31 +58,37 @@ export default function ProfileScreen() {
               style={{ width: "100%", overflow: "hidden" }}
             >
               <YStack width="100%" space>
-          {favorites.length === 0 ? (
-            <Paragraph color="$color">No favorite movies found.</Paragraph>
-          ) : (
-            favorites.map((movie) => (
-              <XStack
-                key={movie.id}
-                bg="$backgroundHover"
-                p="$2"
-                borderTopLeftRadius="$2"
-                borderTopRightRadius="$2"
-                borderBottomLeftRadius="$2"
-                borderBottomRightRadius="$2"
-              >
-                <Image
-            source={{ uri: movie.poster }}
-            width={50}
-            height={75}
-                />
-                <YStack ml="$2" justify="center">
-            <Paragraph>{movie.title}</Paragraph>
-            <Paragraph color="$color">{movie.year}</Paragraph>
-                </YStack>
-              </XStack>
-            ))
-          )}
+                {favorites.length === 0 ? (
+                  <YStack items="center">
+                    <Paragraph color="$color">
+                      No favorite movies found.
+                    </Paragraph>
+                  </YStack>
+                ) : (
+                  favorites.map((movie) => (
+                    <XStack
+                      key={movie.id}
+                      bg="$backgroundHover"
+                      p="$2"
+                      borderTopLeftRadius="$2"
+                      borderTopRightRadius="$2"
+                      borderBottomLeftRadius="$2"
+                      borderBottomRightRadius="$2"
+                    >
+                      <Image
+                        source={{
+                          uri: `${IMAGE_BASE_URL}${movie.backdrop_path}`,
+                        }}
+                        width={50}
+                        height={75}
+                      />
+                      <YStack ml="$2" justify="center">
+                        <Paragraph>{movie.title}</Paragraph>
+                        <Paragraph color="$color">{movie.year}</Paragraph>
+                      </YStack>
+                    </XStack>
+                  ))
+                )}
               </YStack>
             </MotiView>
           )}

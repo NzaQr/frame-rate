@@ -84,22 +84,13 @@ function RootLayoutNav() {
                 console.error("Error parsing movie data:", error);
               }
               return {
-                title: movieData?.title || "Movie Details",
+                headerShown: false,
                 presentation: "modal",
-                animation: "slide_from_right",
                 gestureEnabled: true,
                 gestureDirection: "horizontal",
                 contentStyle: {
                   backgroundColor: theme.background.val,
                 },
-                headerRight: () => (
-                  <Button
-                    icon={X}
-                    circular
-                    size="$3"
-                    onPress={() => router.back()}
-                  />
-                ),
               };
             }}
           />

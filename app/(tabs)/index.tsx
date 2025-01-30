@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { FlatList } from "react-native";
 import {
   Input,
@@ -9,32 +9,63 @@ import {
   H4,
   Paragraph,
   Image,
+  Spinner,
+  H3,
+  H2,
+  H5,
 } from "tamagui";
 import { Search, Heart } from "@tamagui/lucide-icons";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { Link } from "expo-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
-const mockMovies = [
-  {
-    id: "1",
-    title: "Inception",
-    year: 2010,
-    poster:
-      "https://image.tmdb.org/t/p/original/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg",
-  },
-  {
-    id: "2",
-    title: "The Dark Knight",
-    year: 2008,
-    poster: "https://m.media-amazon.com/images/I/A1exRxgHRRL.jpg",
-  },
-];
+const TMDB_API_KEY = "7e8845586d780d43d2434f0780112873";
+const BASE_URL = "https://api.themoviedb.org/3";
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+
+type Movie = {
+  id: string;
+  title: string;
+  release_date: string;
+  poster_path: string;
+  year: number;
+  poster: string;
+};
+
+const fetchPopularMovies = async () => {
+  const response = await axios.get(`${BASE_URL}/movie/popular`, {
+    params: { api_key: TMDB_API_KEY },
+  });
+  return response.data.results.map((movie: any) => ({
+    ...movie,
+    year: new Date(movie.release_date).getFullYear(),
+  }));
+};
+
+const searchMovies = async (query: string) => {
+  const response = await axios.get(`${BASE_URL}/search/movie`, {
+    params: { api_key: TMDB_API_KEY, query },
+  });
+  return response.data.results;
+};
 
 export default function BrowseScreen() {
   const [searchQuery, setSearchQuery] = useState("");
-  const { favorites, toggleFavorite } = useFavorites();
+  const { favorites } = useFavorites();
 
-  const renderMovieItem = ({ item }) => {
+  const {
+    data: movies,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery<Movie[]>({
+    queryKey: ["movies", searchQuery],
+    queryFn: () =>
+      searchQuery ? searchMovies(searchQuery) : fetchPopularMovies(),
+  });
+
+  const renderMovieItem = ({ item }: { item: Movie }) => {
     const isFavorite = favorites.some((fav) => fav.id === item.id);
 
     return (
@@ -42,28 +73,29 @@ export default function BrowseScreen() {
         href={{ pathname: "/modal", params: { movie: JSON.stringify(item) } }}
         asChild
       >
-        <Card elevate size="$4" bordered marginBottom="$4">
+        <Card elevate size="$2" bordered marginBottom="$4">
           <Card.Header padded>
-            <Image source={{ uri: item.poster }} width={150} height={225} />
-            <YStack mt="$2" width="100%">
-              <XStack justify="space-between" items="center">
-                <H4>{item.title}</H4>
-                <Button
-                  icon={
-                    <Heart
-                      color={isFavorite ? "$red10" : "$color"}
-                      fill={isFavorite ? "red" : "none"}
-                    />
-                  }
-                  onPress={(e) => {
-                    e.stopPropagation();
-                    toggleFavorite(item);
-                  }}
-                  bg="transparent"
+            <Suspense fallback={<Spinner size="large" color="$red10" />}>
+              <YStack>
+                {isFavorite && (
+                  <Heart
+                    color={"red"}
+                    fill={"red"}
+                    style={{
+                      position: "absolute",
+                      top: 10,
+                      left: 10,
+                      zIndex: 1,
+                    }}
+                  />
+                )}
+                <Image
+                  source={{ uri: `${IMAGE_BASE_URL}${item.poster_path}` }}
+                  width={150}
+                  height={225}
                 />
-              </XStack>
-              <Paragraph color="$color">{item.year}</Paragraph>
-            </YStack>
+              </YStack>
+            </Suspense>
           </Card.Header>
         </Card>
       </Link>
@@ -75,23 +107,32 @@ export default function BrowseScreen() {
       <XStack items="center" mb="$4">
         <Input
           flex={1}
-          placeholder="Search movies..."
+          placeholder="Search movies"
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
-        <Button
-          icon={Search}
-          ml="$2"
-          onPress={() => {
-            /* Implementar búsqueda */
-          }}
-        />
+        <Button icon={Search} ml="$2" onPress={() => refetch()} />
       </XStack>
-      <FlatList
-        data={mockMovies}
-        renderItem={renderMovieItem}
-        keyExtractor={(item) => item.id}
-      />
+      {isLoading ? (
+        <YStack flex={1} justify="center" items="center">
+          <Spinner size="large" />
+        </YStack>
+      ) : error ? (
+        <Paragraph>Error loading movies. Please try again.</Paragraph>
+      ) : (
+        <>
+          <H5 my="$3">
+            {searchQuery ? `Results for: ${searchQuery}` : "Trending"}
+          </H5>
+          <FlatList
+            data={movies}
+            renderItem={renderMovieItem}
+            keyExtractor={(item) => item.id.toString()}
+            numColumns={2}
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+          />
+        </>
+      )}
     </YStack>
   );
 }
