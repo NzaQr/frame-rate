@@ -37,7 +37,6 @@ const BrowseView = ({
           value={searchQuery}
           onChangeText={onSearchChange}
         />
-        <Button icon={Search} ml="$2" onPress={onSearch} />
       </XStack>
       {isLoading ? (
         <YStack flex={1} justify="center" items="center">
