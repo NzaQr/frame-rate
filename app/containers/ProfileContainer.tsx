@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useFavoritesStore } from "../../contexts/FavoritesStore";
 import ProfileView from "../components/ProfileView";
+import { useAuthStore } from "contexts/authStore";
 
 const ProfileContainer = () => {
   const { favorites } = useFavoritesStore();
@@ -14,6 +15,9 @@ const ProfileContainer = () => {
   const handleToggleRatings = () => {
     setShowRatings(!showRatings);
   };
+
+  const { user } = useAuthStore();
+  console.log(user);
 
   return (
     <ProfileView

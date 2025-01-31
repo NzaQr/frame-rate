@@ -1,54 +1,33 @@
-import { useState, useEffect } from "react";
-import { YStack, Input, Button, Text } from "tamagui";
+import { YStack, Input, Button, Text, Spinner } from "tamagui";
 import { StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useQuery } from "@tanstack/react-query";
-import { movieApi } from "services/movieApi";
 import { IMAGE_BASE_URL } from "constants/movie-types";
 import { Film } from "@tamagui/lucide-icons";
 import { Image } from "expo-image";
-type LoginFormProps = {
-  onSubmit: (email: string, password: string) => Promise<void>;
+
+interface LoginFormProps {
   onRegisterPress: () => void;
-};
+  currentBackdropPath: string | null;
+  email: string;
+  setEmail: (email: string) => void;
+  password: string;
+  setPassword: (password: string) => void;
+  loading: boolean;
+  error: string | null;
+  handleSubmitInput: () => void;
+}
 
-const LoginForm = ({ onSubmit, onRegisterPress }: LoginFormProps) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [currentBackdropIndex, setCurrentBackdropIndex] = useState(0);
-
-  const { data: movies, isLoading } = useQuery({
-    queryKey: ["popularMovies"],
-    queryFn: () => movieApi.fetchPopularMovies(),
-  });
-
-  useEffect(() => {
-    if (!movies?.length) return;
-
-    const interval = setInterval(() => {
-      setCurrentBackdropIndex((prevIndex) =>
-        prevIndex === movies.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [movies]);
-
-  const handleSubmit = async () => {
-    if (!email || !password) {
-      setError("Please fill in all fields");
-      return;
-    }
-    setError("");
-    await onSubmit(email, password);
-  };
-
-  const currentBackdropPath = movies
-    ? movies[currentBackdropIndex]?.backdrop_path
-    : null;
-  console.log(`${IMAGE_BASE_URL}${currentBackdropPath}`);
-
+const LoginForm = ({
+  currentBackdropPath,
+  email,
+  setEmail,
+  password,
+  setPassword,
+  error,
+  handleSubmitInput,
+  onRegisterPress,
+  loading,
+}: LoginFormProps) => {
   return (
     <YStack width="100%" height="100%">
       {currentBackdropPath && (
@@ -66,7 +45,7 @@ const LoginForm = ({ onSubmit, onRegisterPress }: LoginFormProps) => {
           "rgba(0,0,0,1)",
           "#000000",
         ]}
-        locations={[0, 0.4, 0.6, 0.75, 0.85, 1]}
+        locations={[0, 0.4, 0.6, 0.8]}
         style={styles.gradient}
       />
 
@@ -116,12 +95,12 @@ const LoginForm = ({ onSubmit, onRegisterPress }: LoginFormProps) => {
 
         <Button
           theme="accent"
-          onPress={handleSubmit}
+          onPress={handleSubmitInput}
           width="100%"
           rounded="$2"
           height={50}
         >
-          Login
+          {loading ? <Spinner /> : "Login"}
         </Button>
 
         <Button
