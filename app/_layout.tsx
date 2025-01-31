@@ -1,5 +1,4 @@
 import "../tamagui-web.css";
-
 import { useEffect } from "react";
 import { StatusBar, useColorScheme } from "react-native";
 import {
@@ -8,22 +7,18 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useTheme } from "tamagui";
 import Provider from "./Provider";
+import { useAuthStore } from "contexts/authStore";
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from "expo-router";
+export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: "(tabs)",
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -32,9 +27,30 @@ export default function RootLayout() {
     InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
   });
 
+  const segments = useSegments();
+  const router = useRouter();
+  const { isAuthenticated, initializeAuth } = useAuthStore();
+
+  // Initialize authentication
+  useEffect(() => {
+    initializeAuth();
+  }, []);
+
+  // Handle authentication routing
+  useEffect(() => {
+    if (!interLoaded && !interError) return; // Wait for fonts to load before navigation
+
+    const inAuthGroup = segments[0] === "(tabs)" || segments[0] === "modal";
+    if (!isAuthenticated && inAuthGroup) {
+      router.replace("/login");
+    } else if (isAuthenticated && !inAuthGroup) {
+      router.replace("/(tabs)");
+    }
+  }, [isAuthenticated, segments, interLoaded, interError]);
+
+  // Handle splash screen
   useEffect(() => {
     if (interLoaded || interError) {
-      // Hide the splash screen after the fonts have loaded (or an error was returned) and the UI is ready.
       SplashScreen.hideAsync();
     }
   }, [interLoaded, interError]);
@@ -57,6 +73,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const theme = useTheme();
+
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <StatusBar
@@ -90,6 +107,22 @@ function RootLayoutNav() {
                 backgroundColor: theme.background.val,
               },
             };
+          }}
+        />
+
+        <Stack.Screen
+          name="login"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="register"
+          options={{
+            headerShown: true,
+            title: "Register",
+            headerBackTitle: "Back",
           }}
         />
       </Stack>
