@@ -10,6 +10,7 @@ type ProfileViewProps = {
   onToggleFavorites: () => void;
   showRatings: boolean;
   onToggleRatings: () => void;
+  name: string;
 };
 
 const ProfileView = ({
@@ -18,6 +19,7 @@ const ProfileView = ({
   onToggleFavorites,
   showRatings,
   onToggleRatings,
+  name,
 }: ProfileViewProps) => {
   return (
     <ScrollView bg="$background">
@@ -26,7 +28,9 @@ const ProfileView = ({
           <Avatar.Image src="https://via.placeholder.com/150" />
           <Avatar.Fallback backgroundColor="$color" />
         </Avatar>
-        <H3 mt="$4">John Doe</H3>
+        <H3 mt="$4" fontWeight="bold">
+          {name}
+        </H3>
         <Paragraph color="$color">Movie Enthusiast</Paragraph>
 
         <Separator />

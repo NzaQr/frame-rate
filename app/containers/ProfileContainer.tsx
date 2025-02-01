@@ -17,10 +17,10 @@ const ProfileContainer = () => {
   };
 
   const { user } = useAuthStore();
-  console.log(user);
 
   return (
     <ProfileView
+      name={user?.username || ""}
       favorites={favorites}
       showFavorites={showFavorites}
       onToggleFavorites={handleToggleFavorites}

@@ -44,14 +44,14 @@ const BrowseView = ({
         <Paragraph>Error loading movies. Please try again.</Paragraph>
       ) : (
         <>
-          <Paragraph my="$3" fontSize="$8">
+          <Paragraph my="$3" fontSize="$8" fontWeight="bold">
             {searchQuery ? `Results for: ${searchQuery}` : "Trending"}
           </Paragraph>
           <FlatList
             data={movies}
             renderItem={renderMovieItem}
             keyExtractor={(item) => item.id.toString()}
-            numColumns={2}
+            numColumns={3}
             columnWrapperStyle={{ justifyContent: "space-between" }}
             keyboardDismissMode="on-drag"
           />

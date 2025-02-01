@@ -31,22 +31,18 @@ export default function RootLayout() {
   const router = useRouter();
   const { isAuthenticated, initializeAuth, isLoading } = useAuthStore();
 
-  // Initialize authentication
   useEffect(() => {
     initializeAuth();
   }, [initializeAuth]);
 
-  // Handle authentication routing
   useEffect(() => {
-    if (!interLoaded && !interError) return; // Espera a que las fuentes se carguen
-    if (isLoading) return; // Espera a que la autenticación se inicialice
+    if (!interLoaded && !interError) return;
+    if (isLoading) return;
 
     const inAuthGroup =
       segments[0] === "(tabs)" ||
       segments[0] === "modal" ||
       segments[0] === "settings";
-
-    console.log("isAuthenticated:", isAuthenticated);
 
     if (!isAuthenticated && inAuthGroup) {
       router.replace("/login");
@@ -55,7 +51,6 @@ export default function RootLayout() {
     }
   }, [isAuthenticated, segments, interLoaded, interError, isLoading]);
 
-  // Handle splash screen
   useEffect(() => {
     if (interLoaded || interError) {
       SplashScreen.hideAsync();
@@ -127,9 +122,7 @@ function RootLayoutNav() {
         <Stack.Screen
           name="register"
           options={{
-            headerShown: true,
-            title: "Register",
-            headerBackTitle: "Back",
+            headerShown: false,
           }}
         />
 

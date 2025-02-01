@@ -28,7 +28,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   initializeAuth: async () => {
     try {
-      // 1. Obtener la sesión actual
       const {
         data: { session },
         error,
@@ -36,9 +35,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
       if (error) throw error;
 
-      // 2. Configurar el listener para cambios en la sesión
       supabase.auth.onAuthStateChange(async (event, session) => {
-        console.log("Auth state changed:", event);
         if (session) {
           const { data: profile } = await supabase
             .from("profiles")
@@ -60,7 +57,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
         }
       });
 
-      // 3. Si hay una sesión activa, cargar los datos del usuario
       if (session) {
         const { data: profile } = await supabase
           .from("profiles")
@@ -124,13 +120,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   register: async (username: string, email: string, password: string) => {
     try {
-      // 1. Crear el usuario en auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
-            username, // Esto se almacena en raw_user_meta_data
+            username,
           },
         },
       });
@@ -138,10 +133,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
       if (authError) throw authError;
       if (!authData.user) throw new Error("No user data returned");
 
-      // 2. Esperar un momento para asegurar que el usuario se creó
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // 3. Actualizar el estado
       set({
         user: {
           id: authData.user.id,

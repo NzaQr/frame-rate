@@ -1,13 +1,24 @@
 import { useRouter } from "expo-router";
 import LoginForm from "../components/LoginForm";
-import { YStack } from "tamagui";
+import { ScrollView, YStack } from "tamagui";
 import { useAuthStore } from "contexts/authStore";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { movieApi } from "services/movieApi";
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+} from "react-native";
 const LoginContainer = () => {
   const router = useRouter();
   const login = useAuthStore((state) => state.login);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [currentBackdropIndex, setCurrentBackdropIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (email: string, password: string) => {
     const success = await login(email, password);
@@ -22,11 +33,6 @@ const LoginContainer = () => {
     router.push("/register");
   };
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [currentBackdropIndex, setCurrentBackdropIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
   const { data: movies } = useQuery({
     queryKey: ["popularMovies"],
     queryFn: () => movieApi.fetchPopularMovies(),
@@ -60,19 +66,24 @@ const LoginContainer = () => {
     : null;
 
   return (
-    <YStack flex={1} justify="center" bg="$background">
-      <LoginForm
-        currentBackdropPath={currentBackdropPath}
-        email={email}
-        setEmail={setEmail}
-        password={password}
-        setPassword={setPassword}
-        error={error}
-        handleSubmitInput={handleSubmitInput}
-        onRegisterPress={handleRegisterPress}
-        loading={loading}
-      />
-    </YStack>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        style={{ flexGrow: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <LoginForm
+          currentBackdropPath={currentBackdropPath}
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          error={error}
+          handleSubmitInput={handleSubmitInput}
+          onRegisterPress={handleRegisterPress}
+          loading={loading}
+        />
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 export default LoginContainer;

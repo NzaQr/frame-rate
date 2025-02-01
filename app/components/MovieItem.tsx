@@ -15,8 +15,16 @@ const MovieItem = ({ movie, isFavorite }: MovieItemProps) => {
       href={{ pathname: "/modal", params: { movie: JSON.stringify(movie) } }}
       asChild
     >
-      <Card elevate size="$2" bordered marginBottom="$4">
-        <Card.Header padded>
+      <Card
+        elevate
+        size="$0.25"
+        bg="transparent"
+        borderColor="$accentBackground"
+        borderWidth={0.75}
+        borderRadius="$2"
+        marginBottom="$5"
+      >
+        <Card.Header rounded="$2">
           <Suspense fallback={<Spinner size="large" color="$red10" />}>
             <YStack>
               {isFavorite && (
@@ -32,9 +40,10 @@ const MovieItem = ({ movie, isFavorite }: MovieItemProps) => {
                 />
               )}
               <Image
+                borderRadius="$1"
                 source={{ uri: `${IMAGE_BASE_URL}${movie.poster_path}` }}
-                width={150}
-                height={225}
+                width={100}
+                height={150}
               />
             </YStack>
           </Suspense>

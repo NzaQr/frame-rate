@@ -29,7 +29,7 @@ const LoginForm = ({
   loading,
 }: LoginFormProps) => {
   return (
-    <YStack width="100%" height="100%">
+    <>
       {currentBackdropPath && (
         <Image
           source={{ uri: `${IMAGE_BASE_URL}${currentBackdropPath}` }}
@@ -64,13 +64,12 @@ const LoginForm = ({
           style={{ transform: [{ rotate: "45deg" }] }}
           mb="$5"
         />
+
         <YStack space="$4" mb="$6" width="100%">
           <Input
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
             rounded="$2"
             height={50}
             style={styles.input}
@@ -100,7 +99,7 @@ const LoginForm = ({
           rounded="$2"
           height={50}
         >
-          {loading ? <Spinner /> : "Login"}
+          {loading ? <Spinner /> : <Text fontWeight="bold">Login</Text>}
         </Button>
 
         <Button
@@ -111,10 +110,10 @@ const LoginForm = ({
           height={50}
           borderColor={"rgba(255, 255, 255, 0.3)"}
         >
-          Create Account
+          <Text fontWeight="bold">Create Account</Text>
         </Button>
       </YStack>
-    </YStack>
+    </>
   );
 };
 
