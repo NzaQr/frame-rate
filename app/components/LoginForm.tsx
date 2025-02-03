@@ -73,6 +73,7 @@ const LoginForm = ({
             rounded="$2"
             height={50}
             style={styles.input}
+            autoCapitalize="none"
           />
 
           <Input
@@ -83,6 +84,7 @@ const LoginForm = ({
             rounded="$2"
             height={50}
             style={styles.input}
+            autoCapitalize="none"
           />
 
           {error ? (

@@ -31,7 +31,7 @@ const ProfileView = ({
         <H3 mt="$4" fontWeight="bold">
           {name}
         </H3>
-        <Paragraph color="$color">Movie Enthusiast</Paragraph>
+        <Paragraph color="$color">bio</Paragraph>
 
         <Separator />
 

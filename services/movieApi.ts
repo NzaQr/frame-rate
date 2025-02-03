@@ -16,6 +16,9 @@ export const movieApi = {
     const response = await axios.get(`${BASE_URL}/search/movie`, {
       params: { api_key: TMDB_API_KEY, query },
     });
-    return response.data.results;
+    return response.data.results.map((movie: any) => ({
+      ...movie,
+      year: new Date(movie.release_date).getFullYear(),
+    }));
   },
 };
